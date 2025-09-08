@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhotoGraphy</title>
+    <link rel="icon" class="title" type="image/x-icon" href="{{ url_for('static', filename='photos/DP.jpg') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #333;
+            --secondary-color: #6c63ff;
+            --text-color: #333;
+            --light-gray: #f5f5f7;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--white);
+            overflow-x: hidden;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .logo span {
+            color: var(--secondary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav a {
+            font-weight: 500;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+        
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 140px 0 60px;
+            background: linear-gradient(to bottom, #f9f9f9, #ffffff);
+            text-align: center;
+        }
+        
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 25px;
+            border: 4px solid var(--white);
+            box-shadow: var(--shadow);
+        }
+        
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            padding: 0 15px;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 25px;
+            color: #666;
+            padding: 0 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background-color: var(--secondary-color);
+            color: var(--white);
+            border-radius: 30px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+        }
+        
+        /* Gallery Section */
+        .gallery-section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            color: var(--primary-color);
+            padding: 0 15px;
+        }
+        
+        .filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding: 0 10px;
+        }
+        
+        .filter-btn {
+            padding: 8px 18px;
+            background: var(--light-gray);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+        
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto 30px;
+            position: relative;
+            padding: 0 15px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+        
+        .search-box i {
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 0 15px;
+        }
+        
+        .gallery-item {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            padding: 15px;
+            color: var(--white);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .gallery-item:hover .item-overlay {
+            opacity: 1;
+        }
+        
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+            padding: 20px;
+        }
+        
+        .lightbox.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .lightbox-content {
+            position: relative;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+        }
+        
+        .lightbox-content img {
+            max-height: 80vh;
+            border-radius: 8px;
+            width: auto;
+            max-width: 100%;
+        }
+        
+        .close-lightbox {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: var(--white);
+            font-size: 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        /* Contact Section */
+        .contact-section {
+            padding: 60px 0;
+            background-color: var(--light-gray);
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 50px 0 25px;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .social-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 42px;
+            height: 42px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile Navigation */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 320px;
+            height: 100vh;
+            background-color: var(--white);
+            z-index: 1001;
+            padding: 80px 30px 30px;
+            transition: right 0.3s ease;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-nav.open {
+            right: 0;
+        }
+        
+        .mobile-nav ul {
+            list-style: none;
+        }
+        
+        .mobile-nav ul li {
+            margin-bottom: 20px;
+        }
+        
+        .mobile-nav ul li a {
+            font-weight: 500;
+            font-size: 1.2rem;
+            display: block;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .close-mobile-nav {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 0;
+            }
+            
+            .logo {
+                font-size: 1.4rem;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero {
+                padding: 120px 0 50px;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .profile-img {
+                width: 130px;
+                height: 130px;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 15px;
+            }
+            
+            .gallery-item img {
+                height: 200px;
+            }
+            
+            .contact-form {
+                padding: 25px 20px;
+            }
+            
+            .filters {
+                gap: 8px;
+            }
+            
+            .filter-btn {
+                padding: 7px 15px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .profile-img {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .btn {
+                padding: 10px 24px;
+                font-size: 0.95rem;
+            }
+            
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .gallery-item img {
+                height: 220px;
+            }
+            
+            .filters {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            
+            .filters::-webkit-scrollbar {
+                display: none;
+            }
+            
+            .filter-btn {
+                flex-shrink: 0;
+            }
+            
+            .search-box {
+                margin-bottom: 20px;
+            }
+            
+            .contact-form {
+                padding: 20px 15px;
+            }
+            
+            .form-group input,
+            .form-group textarea {
+                padding: 12px;
+            }
+            
+            .social-links {
+                gap: 12px;
+            }
+            
+            .social-links a {
+                width: 40px;
+                height: 40px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+            
+            .hero p {
+                font-size: 0.95rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            .gallery-item img {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">Photo<span>Graphy</span></a>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobile-nav">
+        <button class="close-mobile-nav">
+            <i class="fas fa-times"></i>
+        </button>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <img src="{{ url_for('static', filename='photos/DP.jpg') }}" alt="Profile Photo" class="profile-img">
+            <h1>Mirajuddin Mallick</h1>
+            <p>Professional photographer specializing in landscape, portrait, and street photography. Capturing moments that tell stories.</p>
+            <a href="#contact" class="btn">Get in Touch</a>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section" id="gallery">
+        <div class="container">
+            <h2 class="section-title">My Portfolio</h2>
+            
+            <div class="search-box">
+                <input type="text" placeholder="Search photos...">
+                <i class="fas fa-search"></i>
+            </div>
+            
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="nature">Nature</button>
+                <button class="filter-btn" data-filter="urban">Urban</button>
+                <button class="filter-btn" data-filter="portrait">Portrait</button>
+                <button class="filter-btn" data-filter="travel">Travel</button>
+            </div>
+            
+            <div class="gallery">
+                <!-- Nature Images -->
+                <div class="gallery-item" data-category="nature">
+                    <img src="{{ url_for('static', filename='photos/n1.jpg') }}" alt="Portfolio 1">
+                    <div class="item-overlay">
+                        <h3>Mountain Sunrise</h3>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="nature">
+                    <img src="{{ url_for('static', filename='photos/n2.jpg') }}" alt="Portfolio 1">
+                    <div class="item-overlay">
+                        <h3>Forest Pathway</h3>
+                    </div>
+                </div>
+                
+                <!-- Urban Images -->
+                <div class="gallery-item" data-category="urban">
+                    <img src="{{ url_for('static', filename='photos/u1.jpg') }}" alt="Portfolio 1">
+                    <div class="item-overlay">
+                        <h3>City Skyline</h3>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="urban">
+                    <img src="{{ url_for('static', filename='photos/u2.jpg') }}" alt="Portfolio 1">
+                    <div class="item-overlay">
+                        <h3>Urban Architecture</h3>
+                    </div>
+                </div>
+                
+                <!-- Portrait Images -->
+                <div class="gallery-item" data-category="portrait">
+                    <img src="{{ url_for('static', filename='photos/p1.jpg') }}" alt="Portfolio 1">
+                    <div class="item-overlay">
+                        <h3>Portrait Study</h3>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="portrait">
+                    <img src="{{ url_for('static', filename='photos/p2.jpg') }}" alt="Portfolio 1">
+                    <div class="item-overlay">
+                        <h3>Thoughtful Moment</h3>
+                    </div>
+                </div>
+                
+                <!-- Travel Images -->
+                <div class="gallery-item" data-category="travel">
+                    <img src="{{ url_for('static', filename='photos/t1.jpg') }}" alt="Portfolio 1">
+                    <div class="item-overlay">
+                        <h3>Road Trip</h3>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="travel">
+                    <img src="{{ url_for('static', filename='photos/t2.jpg') }}" alt="Portfolio 1">
+                    <div class="item-overlay">
+                        <h3>Tropical Paradise</h3>
+                    </div>
+                </div>
+                
+                <!-- More Images -->
+                <div class="gallery-item" data-category="nature">
+                    <img src="{{ url_for('static', filename='photos/n3.jpg') }}" alt="Portfolio 1">
+                    <div class="item-overlay">
+                        <h3>Mountain Cabin</h3>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="urban">
+                    <img src="{{ url_for('static', filename='photos/u3.jpg') }}" alt="Portfolio 1">
+                    <div class="item-overlay">
+                        <h3>City Lights</h3>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="portrait">
+                    <img src="{{ url_for('static', filename='photos/p3.jpg') }}" alt="Portfolio 1">
+                    <div class="item-overlay">
+                        <h3>Casual Portrait</h3>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="travel">
+                    <img src="{{ url_for('static', filename='photos/t3.jpg') }}" alt="Portfolio 1">
+                    <div class="item-overlay">
+                        <h3>Scenic Train Ride</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div style="text-align: center; max-width: 800px; margin: 0 auto; padding: 0 15px;">
+                <p style="font-size: 1.1rem; margin-bottom: 25px;">
+                    I'm a professional photographer with over 10 years of experience capturing moments that matter. My work has been featured in several publications and exhibitions around the world.
+                </p>
+                <p style="font-size: 1.1rem; margin-bottom: 25px;">
+                    My approach combines technical expertise with artistic vision to create images that tell stories and evoke emotions. I believe in the power of photography to preserve memories and capture the beauty of our world.
+                </p>
+                <p style="font-size: 1.1rem;">
+                    When I'm not behind the camera, I'm leading photography workshops and mentoring emerging photographers in the community.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <form class="contact-form" method="POST" action="/send">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Your email" required>
+    </div>
+    <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Your message" required></textarea>
+    </div>
+    <button type="submit" class="btn">Send Message</button>
+</form>
+
+    <!-- Display Received Messages -->
+    <div id="received-messages" style="margin-top:30px; padding:15px; background:#f5f5f5; border-radius:10px;">
+        <h3>Received Messages</h3>
+        <ul>
+            {% for msg in messages %}
+                <li><strong>{{ msg.name }}</strong> ({{ msg.email }}): {{ msg.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <a href="#" class="logo" style="color: white;">Photo<span>Graphy</span></a>
+            <p style="margin-top: 20px;">Capturing the world one shot at a time</p>
+            
+            <div class="social-links">
+                <a href="https://www.instagram.com/miraj_uddin_mallick/"><i class="fab fa-instagram"></i></a>
+                <a href="https://x.com/Miraj_Mallick_?t=AnLi6Eukihx4DzjsPaPNRQ&s=08"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.facebook.com/share/17798vmEBd/"><i class="fab fa-facebook-f"></i></a>
+                <!-- <a href="#"><i class="fab fa-pinterest"></i></a> -->
+                <a href="https://www.linkedin.com/in/mirajuddin-mallick-b49790368?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 Mirajuddin Mallick Photography. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox">
+        <div class="lightbox-content">
+            <img src="" alt="Lightbox Image">
+            <button class="close-lightbox">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Mobile navigation functionality
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const closeMobileNav = document.querySelector('.close-mobile-nav');
+        const mobileNav = document.getElementById('mobile-nav');
+        const overlay = document.getElementById('overlay');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.add('open');
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        closeMobileNav.addEventListener('click', () => {
+            mobileNav.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        });
+        
+        overlay.addEventListener('click', () => {
+            mobileNav.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                const filter = button.getAttribute('data-filter');
+                
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Lightbox functionality
+        const lightbox = document.querySelector('.lightbox');
+        const lightboxImg = document.querySelector('.lightbox-content img');
+        const closeLightbox = document.querySelector('.close-lightbox');
+        
+        galleryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const imgSrc = item.querySelector('img').getAttribute('src');
+                lightboxImg.setAttribute('src', imgSrc);
+                lightbox.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        closeLightbox.addEventListener('click', () => {
+            lightbox.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Close lightbox when clicking outside the image
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('open');
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Search functionality
+        const searchInput = document.querySelector('.search-box input');
+        
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            galleryItems.forEach(item => {
+                const title = item.querySelector('h3').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Close mobile nav if open
+                    mobileNav.classList.remove('open');
+                    overlay.classList.remove('open');
+                    document.body.style.overflow = 'auto';
+                    
+                    // Scroll to target
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
